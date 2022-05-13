@@ -1,0 +1,51 @@
+version: '3'
+
+services:
+  db:
+    image: mysql:5.7
+    # command to init the MySQL
+    command: --innodb-use-native-aio=0
+    container_name: db
+    # the container will restart automatically in case of suddenly stop
+    restart: always
+    # allows to access the container in the iterative mode
+    tty: true
+    volumes:
+     - ./mysql:/var/lib/mysql
+    environment:
+      - MYSQL_DATABASE=nodedb
+      - MYSQL_ROOT_PASSWORD=root
+    networks:
+      - node-network
+    
+  app:
+    build: 
+      context: ./node.js
+    container_name: app
+    # it will try until it connect to the db 
+    entrypoint: dockerize -wait tcp://db:3306 -timeout 30s docker-entrypoint.sh
+    command: node index.js
+    networks: 
+     - node-network
+    tty: true
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+
+  nginx:
+    build: 
+      context: ./nginx
+    image: nginxnode
+    container_name: nginx
+    networks:
+    - node-network
+    ports:
+      - "8080:8080"
+    depends_on:
+      - app
+
+
+networks:
+  node-network:
+    driver: bridge

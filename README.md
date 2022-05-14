@@ -10,7 +10,7 @@ Code.education Rocks!
 ```
 A imagem deverá obrigatoriamente ter menos de 2 MB.
 
-## Nginx com Node.js utilizando docker-compose [WIP]
+## Nginx com Node.js utilizando docker-compose [DONE]
 
 A idéia principal do exercício é que quando um usuário acesse o nginx, o mesmo fará uma chamada para uma aplicação node.js. Essa aplicação por sua vez adicionará um registro em um banco de dados MySQL, cadastrando um nome na tabela chamada people.
 O retorno da aplicação node.js para o nginx deverá ser:
